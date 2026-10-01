@@ -252,6 +252,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     content += 'SUBZ VOCABULARY NOTEBOOK\n';
     content += `Exported on: ${todayStr}\n`;
     content += `Total Saved Words: ${allSavedWords.length}\n`;
+    content += 'Built by The SurfBoard\n';
     content += '======================================================\n\n';
 
     allSavedWords.forEach((item, idx) => {
@@ -269,7 +270,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       content += '------------------------------------------------------\n';
     });
 
-    content += '\nGenerated with Subz — Master English While Watching.\n';
+    content += '\nGenerated with Subz — Built by The SurfBoard\n';
 
     // Trigger download
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
