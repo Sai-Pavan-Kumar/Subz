@@ -522,3 +522,26 @@ input:checked + .subz-slider:before {
   background-color: #F1F5F9;
   color: #475569;
 }
+
+/* Footer Attribution */
+.subz-footer {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #F1F5F9;
+  text-align: center;
+  font-size: 11px;
+  color: #94A3B8;
+  letter-spacing: 0.02em;
+}
+
+.subz-footer span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.subz-surfboard-brand {
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: 0.02em;
+}
