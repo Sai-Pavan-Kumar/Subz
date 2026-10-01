@@ -24,3 +24,6 @@ Desktop.ini
 # Environment variables & secrets
 .env
 .env.local
+
+# Internal specs and design dossiers
+SUBZ_SPEC.md
