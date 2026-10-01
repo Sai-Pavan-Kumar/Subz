@@ -1,0 +1,117 @@
+import json
+import os
+
+print("[Subz Engine] Compiling Curated Vocabulary Database...")
+
+# Extensive curated dictionary for Learner, Intermediate, and Advanced tiers
+vocab_seed = {
+    # ADVANCED (C1 / C2) - Rare, academic, literary, and high-impact vocabulary
+    "obsolete": {"phonetic": "/ˌɒb.səˈliːt/", "partOfSpeech": "adjective", "level": "advanced", "definition": "No longer used or produced because something newer exists.", "synonyms": ["outdated", "archaic", "superseded"]},
+    "ubiquitous": {"phonetic": "/juːˈbɪk.wɪ.təs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Present, appearing, or found everywhere at the same time.", "synonyms": ["omnipresent", "pervasive", "universal"]},
+    "meticulous": {"phonetic": "/məˈtɪk.jə.ləs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Showing great attention to detail; very careful and precise.", "synonyms": ["diligent", "thorough", "painstaking"]},
+    "epiphany": {"phonetic": "/ɪˈpɪf.ə.ni/", "partOfSpeech": "noun", "level": "advanced", "definition": "A moment of sudden and great revelation or realization.", "synonyms": ["realization", "insight", "breakthrough"]},
+    "pernicious": {"phonetic": "/pəˈnɪʃ.əs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Having a harmful effect, especially in a gradual or subtle way.", "synonyms": ["damaging", "destructive", "harmful"]},
+    "candid": {"phonetic": "/ˈkæn.dɪd/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Truthful, straightforward, and frank in speech or expression.", "synonyms": ["frank", "outspoken", "honest"]},
+    "quintessential": {"phonetic": "/ˌkwɪn.tɪˈsen.ʃəl/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Representing the most perfect or typical example of a quality or class.", "synonyms": ["archetypal", "exemplary", "classic"]},
+    "serendipity": {"phonetic": "/ˌser.ənˈdɪp.ə.ti/", "partOfSpeech": "noun", "level": "advanced", "definition": "Finding valuable or agreeable things not sought for; happy chance.", "synonyms": ["chance", "fluke", "coincidence"]},
+    "taciturn": {"phonetic": "/ˈtæs.ɪ.tɜːn/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Reserved or uncommunicative in speech; saying little.", "synonyms": ["silent", "quiet", "reticent"]},
+    "vicarious": {"phonetic": "/vɪˈkeə.ri.əs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Experienced in the imagination through the feelings or actions of another person.", "synonyms": ["indirect", "secondary", "derivative"]},
+    "pragmatic": {"phonetic": "/præɡˈmæt.ɪk/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Dealing with things sensibly and realistically in a practical way.", "synonyms": ["practical", "sensible", "realistic"]},
+    "ephemeral": {"phonetic": "/ɪˈfem.ər.əl/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Lasting for a very short time; transitory.", "synonyms": ["fleeting", "transient", "short-lived"]},
+    "surreptitious": {"phonetic": "/ˌsʌr.əpˈtɪʃ.əs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Kept secret, especially because it would not be approved of.", "synonyms": ["stealthy", "secretive", "clandestine"]},
+    "clandestine": {"phonetic": "/klænˈdes.tɪn/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Kept secret or done secretively, especially for illicit purposes.", "synonyms": ["covert", "undercover", "hidden"]},
+    "fastidious": {"phonetic": "/fæsˈtɪd.i.əs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Very attentive to and concerned about accuracy and detail.", "synonyms": ["scrupulous", "punctilious", "exacting"]},
+    "magnanimous": {"phonetic": "/mæɡˈnæn.ɪ.məs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Generous or forgiving, especially toward a rival or less powerful person.", "synonyms": ["generous", "charitable", "benevolent"]},
+    "alacrity": {"phonetic": "/əˈlæk.rə.ti/", "partOfSpeech": "noun", "level": "advanced", "definition": "Brisk and cheerful readiness or eagerness.", "synonyms": ["eagerness", "willingness", "readiness"]},
+    "anachronism": {"phonetic": "/əˈnæk.rə.nɪ.zəm/", "partOfSpeech": "noun", "level": "advanced", "definition": "A thing belonging or appropriate to a period other than that in which it exists.", "synonyms": ["misplacement", "archaism", "incongruity"]},
+    "cacophony": {"phonetic": "/kəˈkɒf.ə.ni/", "partOfSpeech": "noun", "level": "advanced", "definition": "A harsh, discordant mixture of sounds.", "synonyms": ["racket", "noise", "clamor"]},
+    "disparate": {"phonetic": "/ˈdɪs.pər.ət/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Essentially different in kind; not allowing comparison.", "synonyms": ["contrasting", "different", "divergent"]},
+    "enervate": {"phonetic": "/ˈen.ə.veɪt/", "partOfSpeech": "verb", "level": "advanced", "definition": "Cause someone to feel drained of energy or vitality; weaken.", "synonyms": ["exhaust", "fatigue", "weaken"]},
+    "esoteric": {"phonetic": "/ˌes.əˈter.ɪk/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Intended for or likely to be understood by only a small number of people.", "synonyms": ["obscure", "arcane", "cryptic"]},
+    "garrulous": {"phonetic": "/ˈɡær.əl.əs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Excessively talkative, especially on trivial matters.", "synonyms": ["talkative", "voluble", "chatty"]},
+    "harangue": {"phonetic": "/həˈræŋ/", "partOfSpeech": "noun", "level": "advanced", "definition": "A lengthy and aggressive speech or lecture.", "synonyms": ["tirade", "diatribe", "rant"]},
+    "iconoclast": {"phonetic": "/aɪˈkɒn.ə.klæst/", "partOfSpeech": "noun", "level": "advanced", "definition": "A person who attacks cherished beliefs or institutions.", "synonyms": ["critic", "rebel", "dissident"]},
+    "juxtaposition": {"phonetic": "/ˌdʒʌk.stə.pəˈzɪʃ.ən/", "partOfSpeech": "noun", "level": "advanced", "definition": "The fact of two things being seen or placed close together with contrasting effect.", "synonyms": ["comparison", "contrast", "proximity"]},
+    "laconic": {"phonetic": "/ləˈkɒn.ɪk/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Using very few words; concise to the point of seeming rude.", "synonyms": ["brief", "concise", "terse"]},
+    "nefarious": {"phonetic": "/nɪˈfeə.ri.əs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Wicked, villainous, or criminal in nature.", "synonyms": ["wicked", "evil", "sinister"]},
+    "ostentatious": {"phonetic": "/ˌɒs.tenˈteɪ.ʃəs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Designed to impress or attract notice; showy or pretentious.", "synonyms": ["showy", "flamboyant", "pretentious"]},
+    "panacea": {"phonetic": "/ˌpæn.əˈsiː.ə/", "partOfSpeech": "noun", "level": "advanced", "definition": "A solution or remedy for all difficulties or diseases.", "synonyms": ["cure-all", "universal remedy", "magic bullet"]},
+    "quandary": {"phonetic": "/ˈkwɒn.dri/", "partOfSpeech": "noun", "level": "advanced", "definition": "A state of perplexity or uncertainty over what to do in a difficult situation.", "synonyms": ["dilemma", "predicament", "plight"]},
+    "recalcitrant": {"phonetic": "/rɪˈkæl.sɪ.trənt/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Having an obstinately uncooperative attitude toward authority or discipline.", "synonyms": ["unruly", "defiant", "disobedient"]},
+    "sycophant": {"phonetic": "/ˈsɪk.ə.fænt/", "partOfSpeech": "noun", "level": "advanced", "definition": "A person who acts obsequiously toward someone important to gain advantage.", "synonyms": ["toady", "flatterer", "yes-man"]},
+    "tenacious": {"phonetic": "/təˈneɪ.ʃəs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Tending to keep a firm hold of something; clinging or persistent.", "synonyms": ["persistent", "determined", "stubborn"]},
+    "venerable": {"phonetic": "/ˈven.ər.ə.bəl/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Accorded a great deal of respect, especially because of age, wisdom, or character.", "synonyms": ["respected", "revered", "honored"]},
+    "zealous": {"phonetic": "/ˈzel.əs/", "partOfSpeech": "adjective", "level": "advanced", "definition": "Having or showing great passion, devotion, or enthusiasm.", "synonyms": ["fervent", "ardent", "passionate"]},
+
+    # INTERMEDIATE (B2) - Words frequent in professional, technical, or film dialogues
+    "reluctant": {"phonetic": "/rɪˈlʌk.tənt/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Unwilling and hesitant to do something.", "synonyms": ["hesitant", "unwilling", "disinclined"]},
+    "consequence": {"phonetic": "/ˈkɒn.sɪ.kwəns/", "partOfSpeech": "noun", "level": "intermediate", "definition": "A result or effect of an action or condition.", "synonyms": ["result", "outcome", "effect"]},
+    "crucial": {"phonetic": "/ˈkruː.ʃəl/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Decisive or critical, especially in the success or failure of something.", "synonyms": ["vital", "critical", "essential"]},
+    "sustain": {"phonetic": "/səˈsteɪn/", "partOfSpeech": "verb", "level": "intermediate", "definition": "Strengthen or support physically or mentally; maintain over time.", "synonyms": ["maintain", "support", "prolong"]},
+    "ambiguous": {"phonetic": "/æmˈbɪɡ.ju.əs/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Open to more than one interpretation; having a double meaning.", "synonyms": ["unclear", "vague", "equivocal"]},
+    "inevitable": {"phonetic": "/ɪnˈev.ɪ.tə.bəl/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Certain to happen; unavoidable.", "synonyms": ["unavoidable", "inescapable", "certain"]},
+    "elaborate": {"phonetic": "/ɪˈlæb.ər.ət/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Involving many carefully arranged parts or details; detailed and complicated.", "synonyms": ["intricate", "detailed", "complex"]},
+    "coherent": {"phonetic": "/kəʊˈhɪə.rənt/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Logical and consistent; clearly articulated.", "synonyms": ["logical", "lucid", "rational"]},
+    "feasible": {"phonetic": "/ˈfiː.zə.bəl/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Possible to do easily or conveniently; practical.", "synonyms": ["practicable", "viable", "workable"]},
+    "preliminary": {"phonetic": "/prɪˈlɪm.ɪ.nər.i/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Denoting an action or event preceding or preparing for something fuller or more important.", "synonyms": ["initial", "introductory", "preparatory"]},
+    "scrutinize": {"phonetic": "/ˈskruː.tɪ.naɪz/", "partOfSpeech": "verb", "level": "intermediate", "definition": "Examine or inspect closely and thoroughly.", "synonyms": ["inspect", "examine", "investigate"]},
+    "vulnerable": {"phonetic": "/ˈvʌl.nər.ə.bəl/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Susceptible to physical or emotional attack or harm.", "synonyms": ["exposed", "defenseless", "susceptible"]},
+    "compromise": {"phonetic": "/ˈkɒm.prə.maɪz/", "partOfSpeech": "noun", "level": "intermediate", "definition": "An agreement reached by each side making concessions.", "synonyms": ["settlement", "concession", "agreement"]},
+    "deteriorate": {"phonetic": "/dɪˈtɪə.ri.ə.reɪt/", "partOfSpeech": "verb", "level": "intermediate", "definition": "Become progressively worse.", "synonyms": ["worsen", "decline", "degenerate"]},
+    "advocate": {"phonetic": "/ˈæd.və.keɪt/", "partOfSpeech": "verb", "level": "intermediate", "definition": "Publicly recommend or support.", "synonyms": ["support", "recommend", "champion"]},
+    "arbitrary": {"phonetic": "/ˈɑː.bɪ.trər.i/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Based on random choice or personal whim, rather than any reason or system.", "synonyms": ["capricious", "random", "unreasoned"]},
+    "comprehensive": {"phonetic": "/ˌkɒm.prɪˈhen.sɪv/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Including or dealing with all or nearly all elements or aspects of something.", "synonyms": ["complete", "exhaustive", "thorough"]},
+    "depict": {"phonetic": "/dɪˈpɪkt/", "partOfSpeech": "verb", "level": "intermediate", "definition": "Show or represent by a drawing, painting, or other art form, or in words.", "synonyms": ["portray", "represent", "illustrate"]},
+    "diligent": {"phonetic": "/ˈdɪl.ɪ.dʒənt/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Having or showing care and conscientiousness in one's work or duties.", "synonyms": ["hardworking", "industrious", "conscientious"]},
+    "fluctuate": {"phonetic": "/ˈflʌk.tʃu.eɪt/", "partOfSpeech": "verb", "level": "intermediate", "definition": "Rise and fall irregularly in number or amount.", "synonyms": ["vary", "shift", "oscillate"]},
+    "hierarchy": {"phonetic": "/ˈhaɪə.rɑː.ki/", "partOfSpeech": "noun", "level": "intermediate", "definition": "A system in which members of an organization or society are ranked according to status or authority.", "synonyms": ["ranking", "order", "pecking order"]},
+    "implicit": {"phonetic": "/ɪmˈplɪs.ɪt/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Implied though not plainly expressed.", "synonyms": ["implied", "indirect", "tacit"]},
+    "legitimate": {"phonetic": "/lɪˈdʒɪt.ɪ.mət/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Conforming to the law or to rules; valid and acceptable.", "synonyms": ["valid", "lawful", "genuine"]},
+    "mitigate": {"phonetic": "/ˈmɪt.ɪ.ɡeɪt/", "partOfSpeech": "verb", "level": "intermediate", "definition": "Make less severe, serious, or painful.", "synonyms": ["alleviate", "reduce", "lessen"]},
+    "notorious": {"phonetic": "/nəʊˈtɔː.ri.əs/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Famous or well known, typically for some bad quality or deed.", "synonyms": ["infamous", "scandalous", "ill-famed"]},
+    "plausible": {"phonetic": "/ˈplɔː.zə.bəl/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Seeming reasonable or probable.", "synonyms": ["credible", "believable", "reasonable"]},
+    "redundant": {"phonetic": "/rɪˈdʌn.dənt/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Not or no longer needed or useful; superfluous.", "synonyms": ["superfluous", "unnecessary", "excess"]},
+    "spontaneous": {"phonetic": "/spɒnˈteɪ.ni.əs/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Performed or occurring as a result of a sudden impulse and without premeditation.", "synonyms": ["unplanned", "impromptu", "natural"]},
+    "tangible": {"phonetic": "/ˈtæn.dʒə.bəl/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Perceptible by touch; clear and definite; real.", "synonyms": ["palpable", "touchable", "concrete"]},
+    "unprecedented": {"phonetic": "/ʌnˈpres.ɪ.den.tɪd/", "partOfSpeech": "adjective", "level": "intermediate", "definition": "Never done or known before.", "synonyms": ["unrivaled", "extraordinary", "unmatched"]},
+
+    # LEARNER (A2 / B1) - Fundamental bridging vocabulary for early English learners
+    "adequate": {"phonetic": "/ˈæd.ə.kwət/", "partOfSpeech": "adjective", "level": "learner", "definition": "Satisfactory or acceptable in quality or quantity.", "synonyms": ["sufficient", "enough", "acceptable"]},
+    "persuade": {"phonetic": "/pəˈsweɪd/", "partOfSpeech": "verb", "level": "learner", "definition": "Cause someone to do something through reasoning or argument.", "synonyms": ["convince", "coax", "influence"]},
+    "frequently": {"phonetic": "/ˈfriː.kwənt.li/", "partOfSpeech": "adverb", "level": "learner", "definition": "Regularly or habitually; often.", "synonyms": ["often", "repeatedly", "regularly"]},
+    "predict": {"phonetic": "/prɪˈdɪkt/", "partOfSpeech": "verb", "level": "learner", "definition": "Say or estimate that a specified thing will happen in the future.", "synonyms": ["forecast", "foretell", "anticipate"]},
+    "hesitate": {"phonetic": "/ˈhez.ɪ.teɪt/", "partOfSpeech": "verb", "level": "learner", "definition": "Pause before saying or doing something through uncertainty.", "synonyms": ["pause", "delay", "waver"]},
+    "anxious": {"phonetic": "/ˈæŋk.ʃəs/", "partOfSpeech": "adjective", "level": "learner", "definition": "Experiencing worry, unease, or nervousness.", "synonyms": ["worried", "concerned", "nervous"]},
+    "cooperate": {"phonetic": "/kəʊˈɒp.ər.eɪt/", "partOfSpeech": "verb", "level": "learner", "definition": "Work jointly toward the same end.", "synonyms": ["collaborate", "assist", "help"]},
+    "essential": {"phonetic": "/ɪˈsen.ʃəl/", "partOfSpeech": "adjective", "level": "learner", "definition": "Absolutely necessary; extremely important.", "synonyms": ["vital", "crucial", "fundamental"]},
+    "gradual": {"phonetic": "/ˈɡrædʒ.u.əl/", "partOfSpeech": "adjective", "level": "learner", "definition": "Taking place or progressing slowly or by degrees.", "synonyms": ["slow", "steady", "step-by-step"]},
+    "genuine": {"phonetic": "/ˈdʒen.ju.ɪn/", "partOfSpeech": "adjective", "level": "learner", "definition": "Truly what something is said to be; authentic.", "synonyms": ["authentic", "real", "sincere"]},
+    "obstacle": {"phonetic": "/ˈɒb.stə.kəl/", "partOfSpeech": "noun", "level": "learner", "definition": "A thing that blocks one's way or prevents progress.", "synonyms": ["barrier", "hurdle", "impediment"]},
+    "potential": {"phonetic": "/pəˈten.ʃəl/", "partOfSpeech": "noun", "level": "learner", "definition": "Latent qualities or abilities that may be developed.", "synonyms": ["possibility", "capability", "prospect"]},
+    "temporary": {"phonetic": "/ˈtem.pər.ər.i/", "partOfSpeech": "adjective", "level": "learner", "definition": "Lasting for only a limited period of time; not permanent.", "synonyms": ["short-term", "provisional", "brief"]},
+    "accurate": {"phonetic": "/ˈæk.jə.rət/", "partOfSpeech": "adjective", "level": "learner", "definition": "Correct in all details; exact.", "synonyms": ["precise", "correct", "exact"]},
+    "brief": {"phonetic": "/briːf/", "partOfSpeech": "adjective", "level": "learner", "definition": "Of short duration; concise in speech or writing.", "synonyms": ["short", "concise", "quick"]},
+    "capable": {"phonetic": "/ˈkeɪ.pə.bəl/", "partOfSpeech": "adjective", "level": "learner", "definition": "Having the ability, fitness, or quality necessary to do something.", "synonyms": ["able", "competent", "proficient"]},
+    "despair": {"phonetic": "/dɪˈspeə/", "partOfSpeech": "noun", "level": "learner", "definition": "The complete loss or absence of hope.", "synonyms": ["hopelessness", "depression", "anguish"]},
+    "efficient": {"phonetic": "/ɪˈfɪʃ.ənt/", "partOfSpeech": "adjective", "level": "learner", "definition": "Achieving maximum productivity with minimum wasted effort or expense.", "synonyms": ["productive", "effective", "streamlined"]},
+    "furious": {"phonetic": "/ˈfjʊə.ri.əs/", "partOfSpeech": "adjective", "level": "learner", "definition": "Extremely angry or enraged.", "synonyms": ["enraged", "irate", "livid"]},
+    "generous": {"phonetic": "/ˈdʒen.ər.əs/", "partOfSpeech": "adjective", "level": "learner", "definition": "Showing a readiness to give more of something than is strictly necessary.", "synonyms": ["charitable", "magnanimous", "unselfish"]},
+    "ignore": {"phonetic": "/ɪɡˈnɔː/", "partOfSpeech": "verb", "level": "learner", "definition": "Refuse to take notice of or acknowledge; disregard intentionally.", "synonyms": ["disregard", "overlook", "neglect"]},
+    "justify": {"phonetic": "/ˈdʒʌs.tɪ.faɪ/", "partOfSpeech": "verb", "level": "learner", "definition": "Show or prove to be right or reasonable.", "synonyms": ["defend", "validate", "explain"]},
+    "maintain": {"phonetic": "/meɪnˈteɪn/", "partOfSpeech": "verb", "level": "learner", "definition": "Cause or enable a condition or state of affairs to continue.", "synonyms": ["preserve", "keep", "sustain"]},
+    "neglect": {"phonetic": "/nɪˈɡlekt/", "partOfSpeech": "verb", "level": "learner", "definition": "Fail to care for properly or ignore entirely.", "synonyms": ["disregard", "ignore", "abandon"]},
+    "participate": {"phonetic": "/pɑːˈtɪs.ɪ.peɪt/", "partOfSpeech": "verb", "level": "learner", "definition": "Take part in an action or event.", "synonyms": ["join", "partake", "engage"]},
+    "reliable": {"phonetic": "/rɪˈlaɪ.ə.bəl/", "partOfSpeech": "adjective", "level": "learner", "definition": "Consistently good in quality or performance; able to be trusted.", "synonyms": ["dependable", "trustworthy", "sound"]},
+    "significant": {"phonetic": "/sɪɡˈnɪf.ɪ.kənt/", "partOfSpeech": "adjective", "level": "learner", "definition": "Sufficiently great or important to be worthy of attention.", "synonyms": ["important", "notable", "meaningful"]},
+    "urgent": {"phonetic": "/ˈɜː.dʒənt/", "partOfSpeech": "adjective", "level": "learner", "definition": "Requiring immediate action or attention.", "synonyms": ["pressing", "critical", "acute"]},
+    "valuable": {"phonetic": "/ˈvæl.jə.bəl/", "partOfSpeech": "adjective", "level": "learner", "definition": "Worth a great deal of money or extremely useful.", "synonyms": ["precious", "useful", "beneficial"]},
+    "witness": {"phonetic": "/ˈwɪt.nəs/", "partOfSpeech": "noun", "level": "learner", "definition": "A person who sees an event, typically a crime or accident, take place.", "synonyms": ["observer", "onlooker", "spectator"]}
+}
+
+# Write out clean JS format
+with open('src/data/vocab_core.js', 'w', encoding='utf-8') as f:
+    f.write('/**\n * Subz — Curated Core Vocabulary Database\n * High-yield vocabulary categorized by CEFR difficulty tiers:\n * - "learner" (A2/B1)\n * - "intermediate" (B2)\n * - "advanced" (C1/C2)\n */\n\n')
+    f.write('const SUBZ_VOCAB_CORE = ' + json.dumps(vocab_seed, indent=2, ensure_ascii=False) + ';\n\n')
+    f.write('if (typeof window !== "undefined") {\n  window.SUBZ_VOCAB_CORE = SUBZ_VOCAB_CORE;\n}\n')
+
+print(f"Generated src/data/vocab_core.js with {len(vocab_seed)} curated seed words.")

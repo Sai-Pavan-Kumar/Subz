@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subz Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="subz-popup">
+    <!-- Header -->
+    <header class="subz-header">
+      <div class="subz-brand">
+        <img src="/icons/icon32.webp" alt="Subz Logo" class="subz-logo" width="22" height="22">
+        <h1 class="subz-title">SUBZ</h1>
+        <span class="subz-version-tag">PRO</span>
+      </div>
+      <label class="subz-switch" title="Toggle Subz extension">
+        <input type="checkbox" id="toggle-enabled" checked>
+        <span class="subz-slider"></span>
+      </label>
+    </header>
+
+    <div class="subz-divider"></div>
+
+    <!-- Quick Word Search & Lookup -->
+    <div class="subz-field">
+      <label for="quick-search-input" class="subz-label">Quick Word Lookup</label>
+      <div class="subz-input-wrapper">
+        <svg class="subz-input-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="quick-search-input" class="subz-search-input has-icon" placeholder="Type or paste any word & press Enter...">
+      </div>
+
+      <div id="quick-search-result" class="subz-quick-result" style="display: none;">
+        <div class="subz-quick-header">
+          <div class="subz-quick-title-group">
+            <span class="subz-quick-word" id="quick-word-title"></span>
+            <span class="subz-card-badge" id="quick-word-badge"></span>
+          </div>
+          <button class="subz-btn-save" id="quick-save-btn">☆ Save</button>
+        </div>
+        <div class="subz-quick-audio-row">
+          <span class="subz-card-phonetic" id="quick-phonetic-text"></span>
+          <button class="subz-audio-pill" id="quick-audio-btn">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            Pronounce
+          </button>
+        </div>
+        <div class="subz-quick-def" id="quick-def-text"></div>
+      </div>
+    </div>
+
+    <div class="subz-divider"></div>
+
+    <!-- Main Settings Form -->
+    <div class="subz-body">
+      <!-- Vocabulary Level Dropdown -->
+      <div class="subz-field">
+        <label for="select-level" class="subz-label">Target English Level</label>
+        <div class="subz-select-wrapper">
+          <select id="select-level" class="subz-select">
+            <option value="learner">Learner (A2/B1 - Medium & hard words)</option>
+            <option value="intermediate" selected>Intermediate (B2 - Uncommon words)</option>
+            <option value="advanced">Advanced (C1/C2 - Rare & elite words)</option>
+          </select>
+          <svg class="subz-select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- Highlight Color Dropdown -->
+      <div class="subz-field">
+        <label for="select-color" class="subz-label">Highlight Style & Color</label>
+        <div class="subz-select-wrapper">
+          <select id="select-color" class="subz-select">
+            <option value="amber" selected>Amber Gold (Default)</option>
+            <option value="cyan">Electric Cyan</option>
+            <option value="emerald">Neon Emerald</option>
+            <option value="rose">Coral Rose</option>
+          </select>
+          <svg class="subz-select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- Playback Behavior Preferences -->
+      <div class="subz-toggles-group">
+        <div class="subz-toggle-row">
+          <span class="subz-toggle-label">Auto-pause when card opens</span>
+          <label class="subz-switch subz-switch-sm">
+            <input type="checkbox" id="toggle-autopause" checked>
+            <span class="subz-slider"></span>
+          </label>
+        </div>
+        <div class="subz-toggle-row">
+          <span class="subz-toggle-label">Auto-pronounce word audio</span>
+          <label class="subz-switch subz-switch-sm">
+            <input type="checkbox" id="toggle-autopronounce">
+            <span class="subz-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="subz-divider"></div>
+
+      <!-- Daily Habit Goal -->
+      <div class="subz-goal-card">
+        <div class="subz-goal-header">
+          <span class="subz-goal-title">Daily Goal: 5 Words</span>
+          <span class="subz-goal-streak" id="streak-badge">🔥 1-Day Streak</span>
+        </div>
+        <div class="subz-progress-bar">
+          <div class="subz-progress-fill" id="goal-progress-fill" style="width: 20%;"></div>
+        </div>
+        <div class="subz-goal-footer">
+          <span id="goal-status-text">1 of 5 words learned today</span>
+        </div>
+      </div>
+
+      <div class="subz-divider"></div>
+
+      <!-- Saved Vocabulary Notebook -->
+      <div class="subz-saved-section">
+        <div class="subz-saved-header">
+          <span class="subz-saved-title">Saved Vocabulary (<span id="saved-count">0</span>)</span>
+        </div>
+        
+        <div class="subz-input-wrapper">
+          <svg class="subz-input-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="search-saved" class="subz-search-input has-icon" placeholder="Search saved words...">
+        </div>
+        
+        <div class="subz-saved-list" id="saved-list">
+          <div class="subz-empty-state" id="saved-empty">No saved words yet. Click the star on any word card while watching!</div>
+        </div>
+
+        <!-- Notebook Actions -->
+        <div class="subz-actions-row">
+          <button id="btn-export-txt" class="subz-btn subz-btn-primary">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download as .txt
+          </button>
+          <button id="btn-clear-saved" class="subz-btn subz-btn-subtle" title="Clear saved vocabulary">
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../data/vocab_core.js"></script>
+  <script src="../data/lemmatizer.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+/**
+ * Subz — Content Script & In-Video Styles
+ * Enforces pure minimalism, zero AI design cliches, and crisp high-contrast underlines.
+ */
+
+/* ==========================================================================
+   Subtitle Highlight Underline Styles
+   ========================================================================== */
+
+.subz-word-highlight {
+  position: relative !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  border-bottom-width: 2px !important;
+  border-bottom-style: solid !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease !important;
+  border-radius: 2px !important;
+  padding: 0 1px !important;
+}
+
+/* Color Palette Variants */
+/* 1. Amber Gold (Default Brand Accent) */
+.subz-theme-amber .subz-word-highlight,
+.subz-word-highlight {
+  border-bottom-color: #D97706 !important; /* Tailwind Amber-600 */
+}
+.subz-theme-amber .subz-word-highlight:hover,
+.subz-word-highlight:hover {
+  background-color: rgba(217, 119, 6, 0.18) !important;
+  border-bottom-color: #B45309 !important;
+}
+
+/* 2. Electric Cyan Variant */
+.subz-theme-cyan .subz-word-highlight {
+  border-bottom-color: #0284C7 !important; /* Sky-600 */
+}
+.subz-theme-cyan .subz-word-highlight:hover {
+  background-color: rgba(2, 132, 199, 0.18) !important;
+  border-bottom-color: #0369A1 !important;
+}
+
+/* 3. Neon Emerald Variant */
+.subz-theme-emerald .subz-word-highlight {
+  border-bottom-color: #059669 !important; /* Emerald-600 */
+}
+.subz-theme-emerald .subz-word-highlight:hover {
+  background-color: rgba(5, 150, 105, 0.18) !important;
+  border-bottom-color: #047857 !important;
+}
+
+/* 4. Coral Rose Variant */
+.subz-theme-rose .subz-word-highlight {
+  border-bottom-color: #E11D48 !important; /* Rose-600 */
+}
+.subz-theme-rose .subz-word-highlight:hover {
+  background-color: rgba(225, 29, 72, 0.18) !important;
+  border-bottom-color: #BE123C !important;
+}
+
+/* Unhighlighted subtitle words (Click-on-demand) */
+.subz-word-plain {
+  position: relative !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+  border-bottom: 1px dotted transparent !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease !important;
+  border-radius: 2px !important;
+  padding: 0 1px !important;
+}
+
+.subz-word-plain:hover {
+  border-bottom-color: rgba(148, 163, 184, 0.7) !important;
+  background-color: rgba(241, 245, 249, 0.15) !important;
+}
+
+/* Prevent video pointer click conflicts on YouTube */
+.ytp-caption-window-container {
+  pointer-events: auto !important;
+}
+
+.caption-window {
+  pointer-events: auto !important;
+  user-select: text !important;
+}
+
+/* ==========================================================================
+   Pure Light Mode Word Card (The Popover)
+   Strictly Zero AI Clichés, Apple x Google Minimalist Standards
+   ========================================================================== */
+
+#subz-word-card {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  width: 330px !important;
+  max-width: 90vw !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", system-ui, sans-serif !important;
+  color: #0F172A !important;
+  padding: 16px 18px !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+  line-height: 1.45 !important;
+  -webkit-font-smoothing: antialiased !important;
+  animation: subzCardFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes subzCardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Card Header */
+.subz-card-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 8px !important;
+}
+
+.subz-word-title-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  flex-wrap: wrap !important;
+}
+
+.subz-card-word {
+  font-size: 19px !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 !important;
+}
+
+.subz-card-pos {
+  font-size: 11px !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: #64748B !important;
+  background-color: #F1F5F9 !important;
+  border-radius: 4px !important;
+  padding: 1px 5px !important;
+}
+
+.subz-card-badge {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  padding: 2px 8px !important;
+  border-radius: 9999px !important;
+  text-transform: capitalize !important;
+  background-color: #F1F5F9 !important;
+  color: #475569 !important;
+  border: 1px solid #E2E8F0 !important;
+}
+
+.subz-badge-advanced {
+  background-color: #FFFBEB !important;
+  color: #B45309 !important;
+  border-color: #FDE68A !important;
+}
+
+.subz-badge-intermediate {
+  background-color: #F0F9FF !important;
+  color: #0284C7 !important;
+  border-color: #BAE6FD !important;
+}
+
+/* Save Star Button */
+.subz-btn-save {
+  background-color: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 4px 8px !important;
+  cursor: pointer !important;
+  color: #475569 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  transition: all 0.15s ease !important;
+}
+
+.subz-btn-save:hover {
+  background-color: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+.subz-btn-save.subz-saved {
+  background-color: #FFFBEB !important;
+  border-color: #FDE68A !important;
+  color: #D97706 !important;
+}
+
+.subz-btn-save.subz-saved .subz-star-icon {
+  fill: #D97706 !important;
+}
+
+/* Audio & Phonetics Bar */
+.subz-card-audio-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 11px !important;
+}
+
+.subz-card-phonetic {
+  font-size: 12.5px !important;
+  color: #64748B !important;
+  font-style: normal !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", monospace !important;
+}
+
+.subz-audio-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+.subz-audio-pill {
+  background-color: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 9999px !important;
+  padding: 3px 8px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transition: all 0.15s ease !important;
+}
+
+.subz-audio-pill:hover {
+  background-color: #F1F5F9 !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+.subz-audio-pill:active {
+  transform: scale(0.96) !important;
+}
+
+/* Definition Area */
+.subz-card-definition {
+  font-size: 13.5px !important;
+  color: #1E293B !important;
+  line-height: 1.55 !important;
+  margin-bottom: 10px !important;
+  font-weight: 450 !important;
+}
+
+.subz-def-loading {
+  color: #94A3B8 !important;
+  font-style: italic !important;
+  font-size: 13px !important;
+}
+
+/* Synonyms */
+.subz-card-synonyms {
+  font-size: 12px !important;
+  color: #64748B !important;
+  margin-bottom: 12px !important;
+  line-height: 1.4 !important;
+}
+
+.subz-syn-label {
+  color: #475569 !important;
+  font-weight: 600 !important;
+  margin-right: 4px !important;
+}
+
+/* Movie Context Sentence */
+.subz-card-context {
+  background-color: #F8FAFC !important;
+  border: 1px solid #F1F5F9 !important;
+  border-radius: 9px !important;
+  padding: 9px 12px !important;
+  margin-bottom: 14px !important;
+}
+
+.subz-context-header {
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: #94A3B8 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 3px !important;
+}
+
+.subz-context-text {
+  font-size: 12.5px !important;
+  line-height: 1.45 !important;
+  color: #334155 !important;
+  font-style: italic !important;
+}
+
+/* Footer Actions */
+.subz-card-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-top: 1px solid #F1F5F9 !important;
+  padding-top: 12px !important;
+  margin-top: 4px !important;
+}
+
+.subz-btn-replay {
+  background-color: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  padding: 7px 11px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  transition: all 0.15s ease !important;
+}
+
+.subz-btn-replay:hover {
+  background-color: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+.subz-btn-replay:active {
+  transform: scale(0.97) !important;
+}
+
+.subz-btn-resume {
+  background-color: #006CF2 !important;
+  border: 1px solid #006CF2 !important;
+  border-radius: 8px !important;
+  padding: 7px 15px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #FFFFFF !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  box-shadow: 0 1px 2px rgba(0, 108, 242, 0.25) !important;
+  transition: all 0.15s ease !important;
+}
+
+.subz-btn-resume:hover {
+  background-color: #0056CC !important;
+  border-color: #0056CC !important;
+}
+
+.subz-btn-resume:active {
+  transform: scale(0.97) !important;
+}
+
+.subz-btn-know {
+  background: none !important;
+  border: none !important;
+  color: #94A3B8 !important;
+  font-size: 11.5px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  padding: 5px 6px !important;
+  transition: color 0.15s ease !important;
+}
+
+.subz-btn-know:hover {
+  color: #475569 !important;
+}
